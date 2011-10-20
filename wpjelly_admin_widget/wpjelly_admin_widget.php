@@ -13,6 +13,20 @@ Author URI: http://greative.jp/
 */
 
 add_action('admin_menu', 'wpjelly_plugin_admin_widget_add_menu');
+
+/**
+ * メニューの設定
+ */
+function wpjelly_plugin_admin_widget_add_menu() {
+	$hookname = add_submenu_page(
+		'edit.php',
+		'サンプルウィジェット',
+		'サンプルウィジェット',
+		'manage_options',
+		__FILE__,
+		'wpjelly_admin_widget');
+}
+
 /**
  * メニューからいけるリンク先コンテンツ
  */
@@ -52,26 +66,13 @@ EOF;
 EOF;
 	echo $str;
 }
-/**
- * メニューの作成とプラグイン内でいけるコンテンツのスタイル設定
- */
-function wpjelly_plugin_admin_widget_add_menu() {
-	$hookname = add_submenu_page(
-		'edit.php',
-		'サンプルウィジェット',
-		'サンプルウィジェット',
-		'manage_options',
-		__FILE__,
-		'wpjelly_admin_widget');
-}
+
 
 
 class AdminWidget extends WP_Widget {
-    /** constructor */
     function AdminWidget() {
         parent::WP_Widget(false, $name = '現在の忙しさ');
     }
-    /** @see WP_Widget::widget */
     function widget($args, $instance) {
         extract( $args );
         echo $before_widget;
