@@ -117,7 +117,7 @@ function kd_child_info_admin_output() {
 							array('value' => '31', 'text' => '31')
 						);
 						foreach ($days as $day) : ?>
-							<option value="<?php echo esc_attr($day['value']); ?>" <?php if(get_option('birth_day_1') == $day['value']){ echo ' selected="selected"'; } ?>><?php echo esc_attr($day['text']); ?></option>
+							<option value="<?php echo esc_attr($day['value']); ?>" <?php if(get_option('birth_day_1') == $day['value']){ echo ' selected="selected"'; } ?>><?php echo esc_html($day['text']); ?></option>
 						<?php endforeach; ?>
 						</select>日
 						</td>
@@ -125,7 +125,7 @@ function kd_child_info_admin_output() {
 					<tr>
 						<th scope="row">性別</th>
 						<td>
-							<label for="boy"><input type="radio" name="sex_1" value="boy" id="boy" <?php if(get_option('sex_1') == 'boy' ){ echo ' checked="checked"'; } ?> />男の子</label>&nbsp;&nbsp;&nbsp;
+							<label for="boy"><input type="radio" name="sex_1" value="boy" id="boy" <?php if(get_option('sex_1') == 'boy' ){ echo ' checked="checked"'; } ?> />男の子</label>
 							<label for="girl"><input type="radio" name="sex_1" value="girl" id="girl" <?php if(get_option('sex_1') == 'girl' ){ echo ' checked="checked"'; } ?> />女の子</label>
 						</td>
 					</tr>
@@ -157,10 +157,10 @@ class ChildInfo extends WP_Widget {
                   <?php 
                         //年齢を求める
                         $now = date('Ymd');//今
-						$birty_year_1 = get_option('birth_year_1');
-						$birth_month_1 = get_option('birth_month_1');
-						$birth_day_1 = get_option('birth_day_1');
-						$birthday = date('Ymd', mktime(0, 0, 0, $birth_month_1, $birth_day_1, $birty_year_1) );//誕生日
+						$birth_year_1 = (int)get_option('birth_year_1');
+						$birth_month_1 = (int)get_option('birth_month_1');
+						$birth_day_1 = (int)get_option('birth_day_1');
+						$birthday = date('Ymd', mktime(0, 0, 0, $birth_month_1, $birth_day_1, $birth_year_1) );//誕生日
 						$age =  ($now - $birthday);
                         $age =  floor($age/10000);//年齢
 
@@ -172,14 +172,14 @@ class ChildInfo extends WP_Widget {
                         if ( $m < 0 ) {
                         	$m = $m+12;
                         }
-                        
+
                         //性別で敬称を変える
                          if ( get_option('sex_1') == 'boy' ) {
                         	$sex = 'くん';
                         } else {
                         	$sex = 'ちゃん';
                         }
-                       
+
                        // 生後日数を求める関数
                        function get_days_baby_lived($birthday_life, $today_life) {
 							$u_date_of_birth = strtotime($birthday_life);  //日付前をUNIXタイム化
@@ -213,12 +213,12 @@ class ChildInfo extends WP_Widget {
 						
                        
                         //タイトル
-                        $title = get_option('child_name_1').$sex.'（'.$age.'才'.$m.'ヶ月）';
+                        $title = esc_html(get_option('child_name_1')).$sex.'（'.$age.'才'.$m.'ヶ月）';
 
                         echo $before_title . $title . $after_title; ?>
 
                         <ul>
-                        	<li><?php echo (int)$birty_year_1; ?>年<?php echo (int)$birth_month_1; ?>月<?php echo (int)$birth_day_1; ?>日生まれ</li>
+                        	<li><?php echo (int)$birth_year_1; ?>年<?php echo (int)$birth_month_1; ?>月<?php echo (int)$birth_day_1; ?>日生まれ</li>
                         	<li>生後<?php echo $days_baby_lived; ?>日目</li>
                         	<li>次のお誕生日まであと<?php echo kids_birthday_countdown($birth_month_1,$birth_day_1); ?>日</li>
                         </ul>
